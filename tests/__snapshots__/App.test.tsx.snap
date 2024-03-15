@@ -6,7 +6,7 @@ exports[`App should render App 1`] = `
   "baseElement": <body>
     <div>
       <div
-        class="center flex flex-row"
+        class="flex flex-row"
       >
         Loading
       </div>
@@ -14,7 +14,7 @@ exports[`App should render App 1`] = `
   </body>,
   "container": <div>
     <div
-      class="center flex flex-row"
+      class="flex flex-row"
     >
       Loading
     </div>

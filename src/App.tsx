@@ -21,9 +21,7 @@ function App() {
         <Route
           index
           element={
-            <Suspense
-              fallback={<div className="center flex flex-row">Loading</div>}
-            >
+            <Suspense fallback={<div className="flex flex-row">Loading</div>}>
               <Home />
             </Suspense>
           }
