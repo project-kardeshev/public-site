@@ -10,7 +10,7 @@ import {
 import AppRouterLayout from './components/layout/AppRouterLayout';
 import NotFound from './pages/NotFound';
 
-const Home = React.lazy(() => import('./pages/Home'));
+const Bounties = React.lazy(() => import('./pages/Bounties'));
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -21,8 +21,20 @@ function App() {
         <Route
           index
           element={
-            <Suspense fallback={<div className="flex flex-row">Loading</div>}>
-              <Home />
+            <Suspense
+              fallback={<div className="flex flex-row text-3xl">Loading</div>}
+            >
+              <Bounties />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/bounties"
+          element={
+            <Suspense
+              fallback={<div className="flex flex-row text-3xl">Loading</div>}
+            >
+              <Bounties />
             </Suspense>
           }
         />
