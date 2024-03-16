@@ -28,6 +28,7 @@
   "dependencies": {
     "@sentry/browser": "^7.101.1",
     "@sentry/react": "^7.101.1",
+    "antd": "^5.15.2",
     "axios": "^1.6.7",
     "axios-retry": "^4.0.0",
     "eslint-plugin-tailwindcss": "^3.14.2",
