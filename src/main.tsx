@@ -20,6 +20,24 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             darkItemColor: color.color.value.textSecondary,
             fontFamily: 'Diablo Heavy',
           },
+          Table: {
+            fontFamily: 'Diablo Heavy',
+          },
+          Pagination: {
+            fontFamily: 'Diablo Heavy',
+          },
+          Select: {
+            fontFamily: 'Diablo Heavy',
+          },
+          Input: {
+            fontFamily: 'Diablo Heavy',
+          },
+          Button: {
+            fontFamily: 'Diablo Heavy',
+          },
+          Tag: {
+            fontFamily: 'Diablo Heavy',
+          },
         },
       }}
     >
