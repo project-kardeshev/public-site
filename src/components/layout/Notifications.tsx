@@ -3,6 +3,8 @@ import { errorEmitter, notificationEmitter } from '@src/services/events';
 import { notification } from 'antd';
 import { useEffect } from 'react';
 
+import ArConnectIcon from '../icons/ArConnect.svg';
+
 export type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 function Notifications() {
@@ -19,7 +21,15 @@ function Notifications() {
       message: 'Arconnect',
       description: message,
       placement: 'bottomRight',
-      duration: 30,
+      duration: 5,
+      icon: (
+        <img
+          src={ArConnectIcon}
+          alt="ArConnect"
+          // eslint-disable-next-line
+          style={{ width: '40px', height: '40px' }}
+        />
+      ),
     } as any;
     console.log(args);
     notificationApi[type](args);
