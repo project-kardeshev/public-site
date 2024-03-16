@@ -1,252 +1,76 @@
-import { Space, Table, TableProps, Tag } from 'antd';
-import React from 'react';
+import { Space, Tag } from 'antd';
+import { startCase } from 'lodash';
+import { Bounty } from 'types/bounty';
 
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
+import { DataColumn, DataTable } from '../components/tables/common';
 
-const columns: TableProps<DataType>['columns'] = [
+const stubData: Bounty[] = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => <span>{text}</span>,
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <span>Invite {record.name}</span>
-        <span>Delete</span>
-      </Space>
-    ),
+    title: 'Build a bounty indexer',
+    description: 'This is a bounty',
+    price: 100,
+    currency: 'USD',
+    sponsors: [
+      {
+        name: 'Sponsor 1',
+        wallet: '0x123',
+        image: 'https://via.placeholder.com/150',
+      },
+    ],
+    resources: [{ title: 'Resource 1', url: 'https://example.com' }],
+    terms: ['Intellectual Property', 'NDA', 'Background Check'],
+    expiration: Date.now(),
+    requiresApproval: false,
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-].map((item, index) => ({ ...item, key: index.toString() }));
+function bountyColumnsGenerator(data: Record<string, any>): DataColumn[] {
+  const renderKeys = ['title', 'price', 'expiration', 'terms'];
+
+  return Object.keys(data)
+    .map((key, index) => {
+      if (!renderKeys.includes(key)) {
+        return;
+      }
+      return new DataColumn({
+        key: index.toString(),
+        title: startCase(key),
+        dataIndex: key,
+        render: (value: any, record: Record<string, any>) => {
+          switch (key) {
+            case 'title':
+              return value;
+            case 'price':
+              return `${value} ${record.currency}`;
+            case 'expiration':
+              return new Date(value).toLocaleString();
+            case 'terms':
+              return (
+                <Space>
+                  {value.map((term: string, index: number) => (
+                    <Tag key={index} color="orange">
+                      {term}
+                    </Tag>
+                  ))}
+                </Space>
+              );
+            default:
+              return value;
+          }
+        },
+      });
+    })
+    .filter((column) => column !== undefined) as DataColumn[];
+}
 
 function Bounties() {
   return (
     <div className={'size-full'}>
-      <Table<DataType>
-        columns={columns}
-        dataSource={data}
-        scroll={{
-          y: 'calc(100vh - 400px)',
-          scrollToFirstRowOnChange: true,
-        }}
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          pageSizeOptions: ['10', '20', '30', '40'],
-          total: data.length,
-          showTotal: (total, range) =>
-            `${range[0]}-${range[1]} of ${total} items`,
-        }}
+      <DataTable
+        columnGenerator={bountyColumnsGenerator}
+        defaultColumns={bountyColumnsGenerator(stubData[0])}
+        requestCacheKey="bounties"
+        dataFetcher={async () => stubData}
       />
     </div>
   );
