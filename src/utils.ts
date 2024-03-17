@@ -8,3 +8,7 @@ export const applyThemePreference = (theme: string) => {
   root.classList.remove(isDark ? LIGHT : DARK);
   root.classList.add(theme);
 };
+
+export function shortTransactionId(id: string) {
+  return id.slice(0, 4) + '...' + id.slice(-4);
+}

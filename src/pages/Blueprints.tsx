@@ -1,9 +1,9 @@
-import BountiesTable from '@src/components/tables/BountiesTable';
+import BlueprintsTable from '@src/components/tables/BlueprintsTable';
 
 function Bounties() {
   return (
     <div className={'size-full'}>
-      <BountiesTable />
+      <BlueprintsTable />
     </div>
   );
 }

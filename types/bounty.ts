@@ -1,6 +1,6 @@
 export type Sponsor = {
   name: string;
-  wallet: string;
+  address: string;
   image: string;
 };
 
@@ -10,6 +10,7 @@ export type Resource = {
 };
 
 export type Bounty = {
+  id: string;
   title: string;
   description: string;
   price: number;
