@@ -4,10 +4,15 @@ import { Bounty } from './bounty';
 
 export type Proposal = {
   id: string;
+  author: string;
   title: string;
   description: string;
-  votes: string[];
+  votes: {
+    yay: string[],
+    nay: string[],
+  };
   status: string;
+  deadline: number; // blockheight
 };
 
 export type DaoMember = {

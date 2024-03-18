@@ -4,6 +4,8 @@ import { startCase } from 'lodash';
 import { Proposal } from 'types/dao';
 
 import { DataColumn, DataTable } from './common';
+import ViewProposal from '../modals/ViewProposal';
+import { useState } from 'react';
 
 const stubData: Proposal[] = [
   {
@@ -11,15 +13,20 @@ const stubData: Proposal[] = [
     id: '0x123'.padEnd(43, '0'),
 
     description: 'This is a proposal',
-    votes: ['0x123', '0x456'],
+    votes: {
+      yay: ['0x123'.padEnd(43, '0')],
+      nay: [],
+    },
     status: 'active',
+    author: "7waR8v4STuwPnTck1zFVkQqJh5K9q9Zik4Y5-5dV7nk",
+    deadline: Date.now()
   },
 ];
 
-function daoProposalsColumnsGenerator(data: Record<string, any>): DataColumn[] {
-  const renderKeys = ['title', 'id', 'votes', 'status'];
+function daoProposalsColumnsGenerator(data: Record<string, any>, viewProposal: (proposal: Proposal) => void): DataColumn[] {
+  const renderKeys = ['title', 'id', 'votes', 'status', 'action'];
 
-  return Object.keys(data)
+  const columns = Object.keys({ ...data, action: '' })
     .map((key, index) => {
       if (!renderKeys.includes(key)) {
         return;
@@ -44,6 +51,10 @@ function daoProposalsColumnsGenerator(data: Record<string, any>): DataColumn[] {
                   </Tag>
                 </Space>
               );
+            case 'action':
+              return (
+                <button className="bg-control-secondary p-1 rounded text-text-primary hover:bg-surface-secondary hover:text-highlight" onClick={() => viewProposal(data as Proposal)}>View</button>
+              );
             default:
               return value;
           }
@@ -51,18 +62,38 @@ function daoProposalsColumnsGenerator(data: Record<string, any>): DataColumn[] {
       });
     })
     .filter((column) => column !== undefined) as DataColumn[];
+  return columns;
 }
 
 function DAOProposalsTable() {
+  const [showViewProposal, setShowViewProposal] = useState(false);
+  const [proposal, setProposal] = useState<Proposal>();
   return (
     <>
       {' '}
       <DataTable
-        columnGenerator={daoProposalsColumnsGenerator}
-        defaultColumns={daoProposalsColumnsGenerator(stubData[0])}
+        columnGenerator={(a) => daoProposalsColumnsGenerator(a, (proposal) => {
+          setProposal(proposal)
+          setShowViewProposal(true)
+        })}
+        defaultColumns={daoProposalsColumnsGenerator(stubData[0], (proposal) => {
+          setProposal(proposal)
+          setShowViewProposal(true)
+        })}
         requestCacheKey="dao-proposals"
         dataFetcher={async () => stubData}
       />
+      {proposal ? <ViewProposal
+        visible={showViewProposal}
+        setVisibility={(visible: boolean) => {
+          if (!visible) {
+            setProposal(undefined)
+          }
+          setShowViewProposal(visible)
+        }}
+        proposal={proposal}
+      /> : <></>}
+
     </>
   );
 }

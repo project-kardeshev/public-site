@@ -16,6 +16,7 @@ export const color = {
       error: '#A40303', // Reddish for error states or messages
       warning: '#FFA500', // Orange for warning states or messages
       success: '#2b8423', // Green for success states or messages
+      black: '#000000', // Black
     },
   },
 };

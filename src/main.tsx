@@ -58,6 +58,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             Tag: {
               fontFamily: 'Diablo Heavy',
             },
+            List: {
+              fontFamily: 'Diablo Heavy',
+            },
+            Notification: {
+              fontFamily: 'Diablo Heavy',
+            },
           },
         }}
       >
