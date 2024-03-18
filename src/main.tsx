@@ -10,6 +10,8 @@ import { errorEmitter } from './services/events.ts';
 // setup sentry
 import './services/sentry.ts';
 
+const fontFamily = 'Diablo Light';
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <SWRConfig
@@ -38,31 +40,31 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               darkItemBg: color.color.value.background,
               darkItemSelectedBg: color.color.value.controlSecondary,
               darkItemColor: color.color.value.textSecondary,
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
             Table: {
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
             Pagination: {
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
             Select: {
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
             Input: {
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
             Button: {
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
             Tag: {
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
             List: {
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
             Notification: {
-              fontFamily: 'Diablo Heavy',
+              fontFamily,
             },
           },
         }}

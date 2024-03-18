@@ -12,7 +12,7 @@ function Navbar() {
       <div className="flex flex-row items-center justify-between px-4">
         <Link
           to="/home"
-          className="flex w-fit flex-row items-center justify-center text-2xl font-bold text-text-primary transition ease-in-out hover:text-highlight"
+          className="flex w-fit flex-row items-center justify-center font-diabloHeavy text-2xl font-bold text-text-primary transition ease-in-out hover:text-highlight"
         >
           <GrDebian size={35} fill="green" className="hover:animate-spin" />
           &nbsp;&nbsp;Kardeshev

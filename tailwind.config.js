@@ -16,7 +16,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        diablo: ['"Diablo Heavy"', 'sans-serif'], // Fallback font is sans-serif
+        diabloHeavy: ['"Diablo Heavy"', 'sans-serif'], // Fallback font is sans-serif
+        diabloLight: ['"Diablo Light"', 'sans-serif'], // Fallback font is sans-serif
         sans: ['Inter', 'sans-serif'],
       },
     },

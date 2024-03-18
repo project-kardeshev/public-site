@@ -9,7 +9,7 @@ function AppRouterLayout() {
   return (
     <>
       <Navbar />
-      <div className="flex w-full h-full flex-row">
+      <div className="flex size-full flex-row">
         <Sidebar />
         <Outlet />
       </div>

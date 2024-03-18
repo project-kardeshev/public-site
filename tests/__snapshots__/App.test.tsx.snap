@@ -13,7 +13,7 @@ exports[`App should render App 1`] = `
           class="flex flex-row items-center justify-between px-4"
         >
           <a
-            class="flex w-fit flex-row items-center justify-center text-2xl font-bold text-text-primary transition ease-in-out hover:text-highlight"
+            class="flex w-fit flex-row items-center justify-center font-diabloHeavy text-2xl font-bold text-text-primary transition ease-in-out hover:text-highlight"
             href="/home"
           >
             <svg
@@ -58,7 +58,7 @@ exports[`App should render App 1`] = `
         </div>
       </div>
       <div
-        class="flex h-full flex-row"
+        class="flex size-full flex-row"
       >
         <div
           class="flex h-full flex-col"
@@ -345,7 +345,7 @@ exports[`App should render App 1`] = `
         class="flex flex-row items-center justify-between px-4"
       >
         <a
-          class="flex w-fit flex-row items-center justify-center text-2xl font-bold text-text-primary transition ease-in-out hover:text-highlight"
+          class="flex w-fit flex-row items-center justify-center font-diabloHeavy text-2xl font-bold text-text-primary transition ease-in-out hover:text-highlight"
           href="/home"
         >
           <svg
@@ -390,7 +390,7 @@ exports[`App should render App 1`] = `
       </div>
     </div>
     <div
-      class="flex h-full flex-row"
+      class="flex size-full flex-row"
     >
       <div
         class="flex h-full flex-col"

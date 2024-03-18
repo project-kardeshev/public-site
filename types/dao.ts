@@ -8,8 +8,8 @@ export type Proposal = {
   title: string;
   description: string;
   votes: {
-    yay: string[],
-    nay: string[],
+    yay: string[];
+    nay: string[];
   };
   status: string;
   deadline: number; // blockheight

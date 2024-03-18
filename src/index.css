@@ -9,8 +9,15 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Diablo Light';
+  src: url('./assets/fonts/DiabloLight.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
-  font-family: 'Diablo Heavy', sans-serif;
+  font-family: 'Diablo Light', sans-serif;
 }
 
 #root {
