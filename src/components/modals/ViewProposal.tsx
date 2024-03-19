@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Proposal } from 'types/dao';
 
+import Vote from './Vote';
+
 function ViewProposal({
   visible,
   setVisibility,
@@ -15,6 +17,7 @@ function ViewProposal({
   proposal: Proposal;
 }) {
   const [authorProfile, setAuthorProfile] = useState<ArAccount>();
+  const [showVoteModal, setShowVoteModal] = useState(false);
 
   useEffect(() => {
     const descriptionElement = document.getElementById('proposal-description');
@@ -87,7 +90,10 @@ function ViewProposal({
                         Yay: {proposal.votes.yay.length} | Nay:{' '}
                         {proposal.votes.nay.length}
                       </span>
-                      <button className="rounded bg-control-secondary p-1 text-text-primary hover:bg-surface-secondary hover:text-highlight">
+                      <button
+                        onClick={() => setShowVoteModal(true)}
+                        className="rounded bg-control-secondary p-1 text-text-primary hover:bg-surface-secondary hover:text-highlight"
+                      >
                         Vote
                       </button>
                     </div>
@@ -118,7 +124,7 @@ function ViewProposal({
           data-test-id="view-proposal-modal-controls"
         >
           <button
-            className="w-full rounded bg-control-secondary p-1 hover:bg-surface-primary hover:text-highlight"
+            className="w-full rounded border-2 border-black/0 bg-control-secondary/10 p-1 text-text-primary/50 hover:border-error/50 hover:bg-surface-secondary hover:text-error/50"
             onClick={close}
             data-test-id="view-proposal-modal-close-button"
           >
@@ -126,6 +132,11 @@ function ViewProposal({
           </button>
         </div>
       </div>
+      <Vote
+        visible={showVoteModal}
+        setVisibility={setShowVoteModal}
+        proposalId={proposal.id}
+      />
     </div>
   );
 }

@@ -7,6 +7,9 @@ import { MdConstruction } from 'react-icons/md';
 import { TbBrandPlanetscale } from 'react-icons/tb';
 import { Link, useLocation } from 'react-router-dom';
 
+import CreateProposal from '../modals/CreateProposal';
+import MintTokens from '../modals/MintTokens';
+
 type MenuItem = Required<MenuProps>['items'][number];
 
 function getItem(
@@ -25,44 +28,6 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem(
-    'Bounties',
-    '1',
-    <Link to="/bounties">
-      <GiCaduceus size={20} />
-    </Link>,
-  ),
-  getItem(
-    'Blueprints',
-    '2',
-    <Link to="/blueprints">
-      <MdConstruction size={20} />
-    </Link>,
-  ),
-  getItem(
-    '$KARD',
-    '3',
-    <Link to="/token-transactions">
-      <TbBrandPlanetscale size={20} />
-    </Link>,
-  ),
-  getItem(
-    'DAO',
-    '4',
-    <Link to="/dao">
-      <GiScales size={20} />
-    </Link>,
-  ),
-  getItem(
-    'Kardeshevians',
-    '5',
-    <Link to="/kardeshevians">
-      <FaPeopleGroup size={20} />
-    </Link>,
-  ),
-];
-
 const KEY_ROUTE_MAP: Record<string, string> = {
   '/bounties': '1',
   '/blueprints': '2',
@@ -74,10 +39,76 @@ const KEY_ROUTE_MAP: Record<string, string> = {
 function Sidebar() {
   const location = useLocation();
   const path = location.pathname;
-  const [collapsed, setCollapsed] = useState(true);
   const [selectedKey, setSelectedKey] = useState(
     KEY_ROUTE_MAP['/kardeshevians'],
   );
+
+  // modal states
+  const [showCreateProposal, setShowCreateProposal] = useState(false);
+  const [showMintTokens, setShowMintTokens] = useState(false);
+
+  const items: MenuItem[] = [
+    getItem(
+      'Bounties',
+      '1',
+      <Link to="/bounties">
+        <GiCaduceus size={20} />
+      </Link>,
+    ),
+    getItem(
+      'Blueprints',
+      '2',
+      <Link to="/blueprints">
+        <MdConstruction size={20} />
+      </Link>,
+    ),
+    getItem(
+      '$KARD',
+      '3',
+      <Link to="/token-transactions">
+        <TbBrandPlanetscale size={20} />
+      </Link>,
+    ),
+    getItem('DAO', '4', <GiScales size={20} />, [
+      getItem(
+        '',
+        '1.1',
+        <Link
+          to="/dao"
+          className="size-full items-center justify-center rounded p-2 hover:bg-surface-secondary hover:text-highlight"
+        >
+          View Proposals
+        </Link>,
+      ),
+      getItem(
+        '',
+        '1.1',
+        <button
+          className="size-full items-center justify-center rounded p-2 hover:bg-surface-secondary hover:text-highlight"
+          onClick={() => setShowCreateProposal(true)}
+        >
+          Create
+        </button>,
+      ),
+      getItem(
+        '',
+        '1.1',
+        <button
+          className="size-full items-center justify-center rounded p-2 hover:bg-surface-secondary hover:text-highlight"
+          onClick={() => setShowMintTokens(true)}
+        >
+          Mint Tokens
+        </button>,
+      ),
+    ]),
+    getItem(
+      'Kardeshevians',
+      '5',
+      <Link to="/kardeshevians">
+        <FaPeopleGroup size={20} />
+      </Link>,
+    ),
+  ];
 
   useEffect(() => {
     console.log('path', path);
@@ -92,10 +123,16 @@ function Sidebar() {
         selectedKeys={[selectedKey]}
         mode="inline"
         theme="dark"
-        inlineCollapsed={collapsed}
+        inlineCollapsed={true}
         items={items}
-        onMouseOver={() => setCollapsed(false)}
-        onMouseOut={() => setCollapsed(true)}
+      />
+      <CreateProposal
+        visible={showCreateProposal}
+        setVisibility={(visible: boolean) => setShowCreateProposal(visible)}
+      />
+      <MintTokens
+        visible={showMintTokens}
+        setVisibility={(visible: boolean) => setShowMintTokens(visible)}
       />
     </div>
   );

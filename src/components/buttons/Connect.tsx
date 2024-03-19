@@ -1,7 +1,9 @@
 import { errorEmitter, notificationEmitter } from '@src/services/events';
 import { useGlobalState } from '@src/services/state/useGlobalState';
+import { shortTransactionId } from '@src/utils';
 import { Avatar } from 'antd';
 import 'arconnect';
+// imports arconnect window definitions
 import Account from 'arweave-account';
 import { startCase } from 'lodash';
 import { useEffect } from 'react';
@@ -17,17 +19,51 @@ function Connect() {
     useGlobalState();
 
   useEffect(() => {
-    if (window.arweaveWallet) {
-      window.arweaveWallet.getActiveAddress().then((address: string) => {
-        setWalletAddress(address);
-        new Account(arweaveAccountOptions).get(address).then((account: any) => {
+    const walletSwitchHandler = (address: string) => {
+      console.log(address);
+      setWalletAddress(address);
+      new Account(arweaveAccountOptions)
+        .get(address)
+        .then((account: any) => {
           notificationEmitter.emit(
             'notification',
             `Connected. Welcome back, ${startCase(account?.profile.handleName)}!`,
           );
           setProfile(account);
+        })
+        .catch((error: any) => {
+          console.error(error);
+          errorEmitter.emit(
+            'error',
+            `Error fetching profile: ${error.message}`,
+          );
         });
+    };
+    if (window.arweaveWallet) {
+      window.arweaveWallet.events.on('walletSwitch', walletSwitchHandler);
+      window.arweaveWallet.getActiveAddress().then((address: string) => {
+        setWalletAddress(address);
+        new Account(arweaveAccountOptions)
+          .get(address)
+          .then((account: any) => {
+            notificationEmitter.emit(
+              'notification',
+              `Connected. Welcome back, ${startCase(account?.profile.handleName)}!`,
+            );
+            console.log(account);
+            setProfile(account);
+          })
+          .catch((error: any) => {
+            console.error(error);
+            errorEmitter.emit(
+              'error',
+              `Error fetching profile: ${error.message}`,
+            );
+          });
       });
+      return () => {
+        window.arweaveWallet.events.off('switch', walletSwitchHandler);
+      };
     }
   }, []);
 
@@ -53,7 +89,12 @@ function Connect() {
       onClick={connectArweaveWallet}
       className={`rounded bg-control-primary ${walletAddress ? 'pl-2' : 'p-2'} font-bold transition ease-in-out hover:bg-surface-secondary hover:text-highlight`}
     >
-      {profile === undefined ? 'Connect' : profile?.profile.handleName}&nbsp;
+      {profile === undefined
+        ? 'Connect'
+        : profile?.profile.handleName.length
+          ? profile.profile.handleName
+          : shortTransactionId(walletAddress)}
+      &nbsp;
       {profile === undefined ? (
         ''
       ) : (

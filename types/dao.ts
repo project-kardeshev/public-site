@@ -3,15 +3,15 @@ import { ArAccount } from 'arweave-account';
 import { Bounty } from './bounty';
 
 export type Proposal = {
-  id: string;
+  id: string; // the id of the transaction used to create the proposal
   author: string;
   title: string;
   description: string;
   votes: {
-    yay: string[];
-    nay: string[];
+    yay: { [address: string]: number }; // address: tokens staked
+    nay: { [address: string]: number };
   };
-  status: string;
+  status: string; // 'active' | 'declined' | 'accepted'
   deadline: number; // blockheight
 };
 
@@ -23,3 +23,5 @@ export type DaoMember = {
   tokenBalance: number;
   profile?: ArAccount;
 };
+
+export type VoteType = 'yay' | 'nay';

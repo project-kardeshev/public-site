@@ -9,11 +9,15 @@ export type GlobalState = {
   theme: ThemeType;
   walletAddress: string;
   profile?: ArAccount;
+  kardBalance: number;
+  credBalance: number;
 };
 
 export type GlobalStateActions = {
   setTheme: (theme: ThemeType) => void;
   setWalletAddress: (walletAddress: string) => void;
+  setKardBalance: (balance: number) => void;
+  setCredBalance: (balance: number) => void;
   setProfile: (profile: ArAccount) => void;
   reset: () => void;
 };
@@ -22,6 +26,8 @@ export const initialGlobalState: GlobalState = {
   theme: THEME_TYPES.DARK,
   walletAddress: '',
   profile: undefined,
+  kardBalance: 0,
+  credBalance: 0,
 };
 
 export class GlobalStateActionBase implements GlobalStateActions {
@@ -38,6 +44,12 @@ export class GlobalStateActionBase implements GlobalStateActions {
   };
   setProfile = (profile: ArAccount) => {
     this.set({ profile });
+  };
+  setKardBalance = (kardBalance: number) => {
+    this.set({ kardBalance });
+  };
+  setCredBalance = (credBalance: number) => {
+    this.set({ credBalance });
   };
   reset = () => {
     this.set({ ...this.initialGlobalState });
