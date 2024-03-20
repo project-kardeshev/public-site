@@ -8,6 +8,8 @@ import Account from 'arweave-account';
 import { startCase } from 'lodash';
 import { useEffect } from 'react';
 
+const arweaveWallet = window.arweaveWallet as unknown as any;
+
 const arweaveAccountOptions = {
   cacheIsActivated: true,
   cacheSize: 100,
@@ -44,8 +46,8 @@ function Connect() {
         });
     };
     if (window.arweaveWallet) {
-      window.arweaveWallet.events.on('walletSwitch', walletSwitchHandler);
-      window.arweaveWallet.getActiveAddress().then((address: string) => {
+      arweaveWallet.events.on('walletSwitch', walletSwitchHandler);
+      arweaveWallet.getActiveAddress().then((address: string) => {
         setWalletAddress(address);
         new Account(arweaveAccountOptions)
           .get(address)
@@ -65,7 +67,7 @@ function Connect() {
           });
       });
       return () => {
-        window.arweaveWallet.events.off('switch', walletSwitchHandler);
+        arweaveWallet.events.off('switch', walletSwitchHandler);
       };
     }
   }, []);
