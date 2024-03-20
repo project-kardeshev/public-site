@@ -35,6 +35,7 @@
     "arweave-account": "^1.4.3",
     "axios": "^1.6.7",
     "axios-retry": "^4.0.0",
+    "babel-jest": "^29.7.0",
     "eslint-plugin-tailwindcss": "^3.14.2",
     "eventemitter3": "^5.0.1",
     "react": "^18.2.0",
@@ -50,7 +51,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
-    "@babel/preset-env": "^7.19.4",
+    "@babel/preset-env": "^7.24.1",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
     "@commitlint/cli": "^17.6.7",

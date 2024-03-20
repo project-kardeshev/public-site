@@ -1,4 +1,16 @@
 {
+  "preset": "ts-jest",
+  "transform": {
+    "^.+\\.(ts|tsx)?$": [
+      "ts-jest",
+      {
+        "tsconfig": "./tsconfig.json",
+        "useESM": true
+      }
+    ],
+    "^.+\\.(js|jsx)$": "babel-jest"
+  },
+  "extensionsToTreatAsEsm": [".ts", ".tsx", ".jsx"],
   "testEnvironment": "jsdom",
   "setupFilesAfterEnv": ["<rootDir>/jest-setup.ts"],
   "collectCoverage": false,
@@ -11,6 +23,7 @@
   },
   "moduleDirectories": ["node_modules", "assets"],
   "testPathIgnorePatterns": ["tests/common/"],
+  "transformIgnorePatterns": ["node_modules/(?!(@permaweb/aoconnect)/)"],
   "coverageThreshold": {
     "global": {
       "branches": 80,

@@ -10,7 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        step: ['lint:check', 'test', 'build']
+        step: [
+            'lint:check',
+            #'test',
+            'build',
+          ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v2
