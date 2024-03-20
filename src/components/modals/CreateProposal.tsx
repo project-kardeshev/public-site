@@ -36,6 +36,7 @@ function CreateProposal({
         title,
         description,
         stakeAmount,
+        memeframeId,
       });
       notificationEmitter.emit(
         'info',

@@ -12,6 +12,7 @@ interface AoClientInterface {
   getCredBalance: (address: string) => Promise<number>;
   getCredBalances: () => Promise<Record<string, number>>;
   getMessages: (address: string) => Promise<Record<string, any>[]>;
+  getMemeframeId: () => Promise<string>;
   // write
   vote: (props: {
     proposalId: string;
@@ -43,7 +44,6 @@ class AoDataProvider implements AoClientInterface {
       process: this.process,
       tags: [{ name: 'Action', value: 'GetProposals' }],
     });
-    console.log(res);
     return JSON.parse(res.Messages[0].Data);
   }
 
@@ -111,6 +111,7 @@ class AoDataProvider implements AoClientInterface {
     title: string;
     description: string;
     stakeAmount: number;
+    memeframeId?: string;
   }) {
     const messageId = await message({
       process: this.process,
@@ -120,6 +121,7 @@ class AoDataProvider implements AoClientInterface {
         { name: 'Title', value: props.title },
         { name: 'Description', value: props.description },
         { name: 'Stake', value: props.stakeAmount.toString() },
+        { name: 'MemeFrameId', value: props.memeframeId || '' },
       ],
     });
     return messageId;
@@ -148,6 +150,17 @@ class AoDataProvider implements AoClientInterface {
       ],
     });
     return messageId;
+  }
+
+  async getMemeframeId(): Promise<string> {
+    const res = await dryrun({
+      process: this.process,
+      tags: [{ name: 'Action', value: 'Info' }],
+    });
+    const frameId = res.Messages[0].Tags.find(
+      (tag: { name: string; value: string }) => tag.name === 'MemeframeId',
+    ).value;
+    return frameId;
   }
 }
 

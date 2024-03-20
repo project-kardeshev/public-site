@@ -14,6 +14,8 @@ export type GlobalState = {
   kardBalance: number;
   credBalance: number;
   showProfileMenu: boolean;
+  memeFrameId?: string;
+  useMemeframe: boolean;
   aoDataProvider: AoDataProvider;
 };
 
@@ -24,6 +26,8 @@ export type GlobalStateActions = {
   setCredBalance: (balance: number) => void;
   setProfile: (profile: ArAccount) => void;
   setShowProfileMenu: (showProfileMenu: boolean) => void;
+  setMemeFrameId: (memeFrameId: string) => void;
+  setUseMemeframe: (useMemeframe: boolean) => void;
   reset: () => void;
 };
 
@@ -35,6 +39,8 @@ export const initialGlobalState: GlobalState = {
   credBalance: 0,
   showProfileMenu: false,
   aoDataProvider: new AoDataProvider(),
+  memeFrameId: undefined,
+  useMemeframe: true,
 };
 
 export class GlobalStateActionBase implements GlobalStateActions {
@@ -60,6 +66,12 @@ export class GlobalStateActionBase implements GlobalStateActions {
   };
   setCredBalance = (credBalance: number) => {
     this.set({ credBalance });
+  };
+  setMemeFrameId = (memeFrameId: string) => {
+    this.set({ memeFrameId });
+  };
+  setUseMemeframe = (useMemeframe: boolean) => {
+    this.set({ useMemeframe });
   };
   reset = () => {
     this.set({ ...this.initialGlobalState });

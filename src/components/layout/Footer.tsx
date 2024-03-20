@@ -1,9 +1,11 @@
+import { useGlobalState } from '@src/services/state/useGlobalState';
 import { FaDiscord } from 'react-icons/fa';
 import { FaGithub } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 
 function Footer() {
+  const { memeFrameId } = useGlobalState();
   const linkClass =
     'transition ease-in-out font-bold hover:text-highlight cursor-pointer text-text-secondary text-sm';
   const iconClass =
@@ -28,6 +30,10 @@ function Footer() {
           Privacy
         </Link>
       </div>
+
+      <span className="text-sm text-text-secondary">
+        version:{memeFrameId ?? 'no memeframe id'}
+      </span>
 
       <div className="flex flex-row items-center justify-between gap-10 px-2">
         <Link to="/discord" className={linkClass}>

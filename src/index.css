@@ -2,16 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @font-face {
   font-family: 'Diablo Heavy';
-  src: url('./assets/fonts/DiabloHeavy.ttf') format('truetype');
+  src: url('/assets/fonts/DiabloHeavy.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Diablo Light';
-  src: url('./assets/fonts/DiabloLight.ttf') format('truetype');
+  src: url('/assets/fonts/DiabloLight.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

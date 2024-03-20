@@ -12,6 +12,7 @@ export type Proposal = {
   };
   status: 'active' | 'accepted' | 'declined';
   deadline: number; // blockheight
+  memeframeId?: string;
 };
 
 export type DaoMember = {

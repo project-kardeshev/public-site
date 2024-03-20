@@ -36,7 +36,6 @@ function ViewProposal({
     new Account().get(proposal.author).then((account: ArAccount) => {
       setAuthorProfile(account);
     });
-    console.log(proposal);
     if (proposal) {
       setVotes(getTotalVotes(proposal.votes));
       updateDeadline(proposal);
@@ -128,6 +127,20 @@ function ViewProposal({
                         Vote
                       </button>
                     </div>
+                  }
+                />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta
+                  title="Proposed Memeframe ID"
+                  description={
+                    proposal.memeframeId ? (
+                      <Link to={`https://arweave.net/${proposal.memeframeId}`}>
+                        {proposal.memeframeId}
+                      </Link>
+                    ) : (
+                      'No Memeframe ID'
+                    )
                   }
                 />
               </List.Item>
