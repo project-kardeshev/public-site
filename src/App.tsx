@@ -10,7 +10,6 @@ import { SWRConfig } from 'swr';
 
 import { color } from '../tokens/tokens.js';
 import AppRouterLayout from './components/layout/AppRouterLayout';
-import useDaoInterfaceSwitch from './hooks/useDaoInterfaceSwitch.tsx';
 import NotFound from './pages/NotFound';
 import { errorEmitter } from './services/events';
 import { useGlobalState } from './services/state/useGlobalState';
@@ -33,7 +32,6 @@ function App() {
     useMemeframe,
     setUseMemeframe,
   } = useGlobalState();
-  useDaoInterfaceSwitch(() => setUseMemeframe(!useMemeframe));
 
   async function updateUserData() {
     if (!walletAddress) return;
@@ -145,17 +143,44 @@ function App() {
   const fontFamily = 'Diablo Light';
   // checks if we are in an iframe and prevents infinitely nesting iframes
   if (
-    validateArweaveId(memeFrameId ?? '') &&
-    window == window.top &&
-    useMemeframe
+    (validateArweaveId(memeFrameId ?? '') &&
+      window == window.top &&
+      useMemeframe === undefined) ||
+    useMemeframe === true
   )
     return (
-      <iframe
-        title="memeframe"
-        name="memeframe"
-        className="size-full"
-        src={`http://arweave.net/${memeFrameId}`}
-      />
+      <div className="size-full">
+        {useMemeframe === undefined ? (
+          <div className="absolute left-0 top-0 z-50 flex size-full items-center justify-center bg-background bg-opacity-50">
+            <div className="flex size-3/4 flex-col rounded-lg border-2 border-control-secondary bg-surface-secondary p-4">
+              <h1 className="flex w-full justify-center p-4 text-4xl">
+                Project Kardeshev
+              </h1>
+              <div className="flex size-full flex-row gap-5">
+                <button
+                  onClick={() => setUseMemeframe(false)}
+                  className={`w-full rounded-lg border-2 border-text-secondary bg-black/30 p-2 text-4xl hover:border-error  hover:text-error`}
+                >
+                  Use Default Dashboard
+                </button>
+                <button
+                  onClick={() => setUseMemeframe(true)}
+                  className={`w-full animate-pulse rounded-lg border-2 border-highlight bg-black/30 p-2 text-4xl hover:border-success hover:text-success`}
+                >
+                  Use Memeframe
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <iframe
+            title="memeframe"
+            name="memeframe"
+            className="size-full"
+            src={`http://arweave.net/${memeFrameId}`}
+          />
+        )}
+      </div>
     );
   return (
     <>

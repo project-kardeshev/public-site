@@ -15,7 +15,7 @@ export type GlobalState = {
   credBalance: number;
   showProfileMenu: boolean;
   memeFrameId?: string;
-  useMemeframe: boolean;
+  useMemeframe?: boolean;
   aoDataProvider: AoDataProvider;
 };
 
@@ -40,7 +40,7 @@ export const initialGlobalState: GlobalState = {
   showProfileMenu: false,
   aoDataProvider: new AoDataProvider(),
   memeFrameId: undefined,
-  useMemeframe: true,
+  useMemeframe: undefined,
 };
 
 export class GlobalStateActionBase implements GlobalStateActions {
