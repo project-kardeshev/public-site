@@ -188,7 +188,7 @@ function App() {
             title="memeframe"
             name="memeframe"
             className="size-full"
-            src={`http://arweave.net/${memeFrameId}`}
+            src={`https://arweave.net/${memeFrameId}`}
           />
         )}
       </div>
