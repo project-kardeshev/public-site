@@ -1,7 +1,5 @@
 import { useGlobalState } from '@src/services/state/useGlobalState';
-import { FaDiscord } from 'react-icons/fa';
 import { FaGithub } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 
 function Footer() {
@@ -17,7 +15,7 @@ function Footer() {
         <p className="text-sm font-bold text-text-secondary">
           © 2024 Project Kardeshev
         </p>
-        <Link
+        {/* <Link
           to="/terms"
           className="cursor-pointer text-sm font-bold text-text-secondary transition ease-in-out hover:text-highlight"
         >
@@ -28,21 +26,21 @@ function Footer() {
           className="cursor-pointer text-sm font-bold text-text-secondary transition ease-in-out hover:text-highlight"
         >
           Privacy
-        </Link>
+        </Link> */}
       </div>
 
       <span className="text-sm text-text-secondary">
-        version:{memeFrameId ?? 'no memeframe id'}
+        memeframe version: {memeFrameId ?? 'no memeframe id'}
       </span>
 
       <div className="flex flex-row items-center justify-between gap-10 px-2">
-        <Link to="/discord" className={linkClass}>
+        {/* <Link to="/discord" className={linkClass}>
           <FaDiscord size={25} className={iconClass} />
         </Link>
         <Link to="/twitter" className={linkClass}>
           <FaXTwitter size={25} className={iconClass} />
-        </Link>
-        <Link to="/github" className={linkClass}>
+        </Link> */}
+        <Link to="https://github.com/project-kardeshev" className={linkClass}>
           <FaGithub size={25} className={iconClass} />
         </Link>
       </div>

@@ -21,16 +21,10 @@ function Navbar() {
 
       <div className="flex flex-row items-center justify-between gap-10 px-2">
         <Link
-          to="/yellow-paper"
+          to="/about"
           className="cursor-pointer font-bold transition ease-in-out hover:text-highlight"
         >
-          Yellow Paper
-        </Link>
-        <Link
-          to="/guide"
-          className="cursor-pointer font-bold transition ease-in-out hover:text-highlight"
-        >
-          Guide
+          About
         </Link>
         <Connect />
       </div>

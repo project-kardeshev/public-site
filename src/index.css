@@ -25,3 +25,15 @@ body {
   flex-direction: column;
   height: 100vh;
 }
+
+
+.customIndent {
+  padding-left: 40px;
+  color: darkgray;
+  /* Adjust indentation */
+}
+
+.customBullet {
+  list-style-type: circle;
+  /* Change bullet style */
+}

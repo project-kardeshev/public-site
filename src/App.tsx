@@ -20,6 +20,7 @@ const Blueprints = React.lazy(() => import('./pages/Blueprints'));
 const TokenTransactions = React.lazy(() => import('./pages/TokenTransactions'));
 const Dao = React.lazy(() => import('./pages/Dao'));
 const Kardeshevians = React.lazy(() => import('./pages/Kardeshevians'));
+const About = React.lazy(() => import('./pages/About.tsx'));
 
 function App() {
   const {
@@ -133,6 +134,16 @@ function App() {
               fallback={<div className="flex flex-row text-3xl">Loading</div>}
             >
               <Kardeshevians />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <Suspense
+              fallback={<div className="flex flex-row text-3xl">Loading</div>}
+            >
+              <About />
             </Suspense>
           }
         />
