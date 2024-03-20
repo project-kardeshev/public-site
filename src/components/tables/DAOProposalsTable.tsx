@@ -1,4 +1,5 @@
-import { shortTransactionId } from '@src/utils';
+import { useGlobalState } from '@src/services/state/useGlobalState';
+import { getTotalVotes, shortTransactionId } from '@src/utils';
 import { Space, Tag } from 'antd';
 import { startCase } from 'lodash';
 import { useState } from 'react';
@@ -14,8 +15,7 @@ const stubData: Proposal[] = [
 
     description: 'This is a proposal',
     votes: {
-      yay: ['0x123'.padEnd(43, '0')],
-      nay: [],
+      ['b'.padEnd(43, '1')]: { yay: 1, nay: 0 },
     },
     status: 'active',
     author: '7waR8v4STuwPnTck1zFVkQqJh5K9q9Zik4Y5-5dV7nk',
@@ -38,14 +38,20 @@ function daoProposalsColumnsGenerator(
         key: index.toString(),
         title: startCase(key),
         dataIndex: key,
-        render: (value: any) => {
+        render: (value: any, record: Record<any, any>) => {
           switch (key) {
             case 'title':
               return value;
             case 'id':
               return shortTransactionId(value);
-            case 'votes':
-              return value.length;
+            case 'votes': {
+              const parsed = getTotalVotes(value);
+              return (
+                <span>
+                  yay: {parsed?.yay} | nay: {parsed?.nay}
+                </span>
+              );
+            }
             case 'status':
               return (
                 <Space>
@@ -58,7 +64,7 @@ function daoProposalsColumnsGenerator(
               return (
                 <button
                   className="rounded bg-control-secondary p-1 text-text-primary hover:bg-surface-secondary hover:text-highlight"
-                  onClick={() => viewProposal(data as Proposal)}
+                  onClick={() => viewProposal(record as Proposal)}
                 >
                   View
                 </button>
@@ -74,14 +80,33 @@ function daoProposalsColumnsGenerator(
 }
 
 function DAOProposalsTable() {
+  const { aoDataProvider } = useGlobalState();
   const [showViewProposal, setShowViewProposal] = useState(false);
   const [proposal, setProposal] = useState<Proposal>();
+  const [dataRequestKey, setDataRequestKey] = useState(
+    'dao-proposals' + Date.now(),
+  );
+
+  function refresh() {
+    setDataRequestKey('dao-proposals' + Date.now());
+  }
+
+  const proposalsFetcher = async () => {
+    const proposals = await aoDataProvider.getProposals();
+    const data = Object.entries(proposals).map(([key, value]) => {
+      return {
+        id: key,
+        ...value,
+      };
+    });
+    return data;
+  };
+
   return (
     <>
-      {' '}
       <DataTable
         columnGenerator={(a) =>
-          daoProposalsColumnsGenerator(a, (proposal) => {
+          daoProposalsColumnsGenerator(a, (proposal: Proposal) => {
             setProposal(proposal);
             setShowViewProposal(true);
           })
@@ -93,23 +118,21 @@ function DAOProposalsTable() {
             setShowViewProposal(true);
           },
         )}
-        requestCacheKey="dao-proposals"
-        dataFetcher={async () => stubData}
+        requestCacheKey={dataRequestKey}
+        dataFetcher={proposalsFetcher}
       />
-      {proposal ? (
-        <ViewProposal
-          visible={showViewProposal}
-          setVisibility={(visible: boolean) => {
-            if (!visible) {
-              setProposal(undefined);
-            }
-            setShowViewProposal(visible);
-          }}
-          proposal={proposal}
-        />
-      ) : (
-        <></>
-      )}
+
+      <ViewProposal
+        visible={showViewProposal}
+        setVisibility={(visible: boolean) => {
+          if (!visible) {
+            setProposal(undefined);
+          }
+          setShowViewProposal(visible);
+          refresh();
+        }}
+        proposal={proposal}
+      />
     </>
   );
 }

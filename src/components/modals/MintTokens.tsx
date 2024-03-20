@@ -1,3 +1,4 @@
+import { errorEmitter, notificationEmitter } from '@src/services/events';
 import { useGlobalState } from '@src/services/state/useGlobalState';
 import { useState } from 'react';
 import { GrDebian } from 'react-icons/gr';
@@ -12,10 +13,38 @@ function MintTokens({
   setVisibility: (visible: boolean) => void;
 }) {
   const [mintAmount, setMintAmount] = useState(0);
-  const { credBalance } = useGlobalState();
+  const {
+    kardBalance,
+    credBalance,
+    aoDataProvider,
+    walletAddress,
+    setKardBalance,
+    setCredBalance,
+  } = useGlobalState();
 
   function close() {
     setVisibility(false);
+  }
+
+  async function mint() {
+    try {
+      if (mintAmount > credBalance) {
+        throw new Error('Insufficient $CRED balance');
+      }
+      notificationEmitter.emit('info', `Minting ${mintAmount} $KARD`);
+      const txid = await aoDataProvider.mintTokens({ amount: mintAmount });
+      const newKardBalance = kardBalance + mintAmount;
+      notificationEmitter.emit(
+        'info',
+        `Minted ${mintAmount} $KARD. Transaction ID: ${txid}. New $KARD balance: ${newKardBalance}`,
+      );
+      const newCredBalance = await aoDataProvider.getCredBalance(walletAddress);
+      setCredBalance(newCredBalance);
+      setKardBalance(newKardBalance);
+      close();
+    } catch (e) {
+      errorEmitter.emit('error', e);
+    }
   }
 
   if (!visible) return <></>;
@@ -63,7 +92,7 @@ function MintTokens({
             </button>
             <button
               className={`rounded border-2 border-highlight/0 bg-success/10 p-1 text-success hover:border-highlight hover:bg-surface-secondary  hover:text-highlight`}
-              onClick={close}
+              onClick={mint}
               data-test-id="mint-modal-close-button"
             >
               MINT

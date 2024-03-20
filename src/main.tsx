@@ -40,6 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               darkItemBg: color.color.value.background,
               darkItemSelectedBg: color.color.value.controlSecondary,
               darkItemColor: color.color.value.textSecondary,
+              darkPopupBg: color.color.value.surfacePrimary,
               fontFamily,
             },
             Table: {
@@ -64,6 +65,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               fontFamily,
             },
             Notification: {
+              fontFamily,
+            },
+            Tooltip: {
+              fontFamily,
+              colorBgSpotlight: color.color.value.surfacePrimary,
+            },
+            Drawer: {
               fontFamily,
             },
           },

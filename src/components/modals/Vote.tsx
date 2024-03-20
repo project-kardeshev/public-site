@@ -1,3 +1,4 @@
+import { notificationEmitter } from '@src/services/events';
 import { useGlobalState } from '@src/services/state/useGlobalState';
 import { useState } from 'react';
 import { VoteType } from 'types/dao';
@@ -16,13 +17,32 @@ function Vote({
 }) {
   const [vote, setVote] = useState<VoteType>('yay');
   const [stakeAmount, setStakeAmount] = useState(0);
-  const { kardBalance } = useGlobalState();
+  const { kardBalance, aoDataProvider } = useGlobalState();
+  const [loading, setLoading] = useState(false);
 
   function close() {
     setVisibility(false);
   }
 
+  async function voteOnProposal() {
+    try {
+      setLoading(true);
+      const id = await aoDataProvider.vote({
+        proposalId,
+        vote,
+        stakeAmount,
+      });
+      notificationEmitter.emit('info', 'Vote submitted, Transaction ID: ' + id);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+      close();
+    }
+  }
+
   if (!visible) return <></>;
+  if (loading) return;
   return (
     <div
       className="absolute left-0 top-0 z-50 flex size-full items-center justify-center bg-black/75 bg-opacity-50"
@@ -93,7 +113,7 @@ function Vote({
             </button>
             <button
               className={`rounded border-2 border-highlight/0 p-1 hover:bg-surface-secondary ${vote === 'yay' ? 'bg-success/10 text-success hover:border-highlight  hover:text-highlight' : 'bg-error/10 text-error hover:border-error'}`}
-              onClick={close}
+              onClick={voteOnProposal}
               data-test-id="vote-modal-close-button"
             >
               Vote

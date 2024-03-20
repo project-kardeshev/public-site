@@ -1,3 +1,4 @@
+import { errorEmitter, notificationEmitter } from '@src/services/events';
 import { useGlobalState } from '@src/services/state/useGlobalState';
 import { validateArweaveIdPartial } from '@src/utils';
 import { useState } from 'react';
@@ -13,7 +14,7 @@ function CreateProposal({
   visible: boolean;
   setVisibility: (visible: boolean) => void;
 }) {
-  const { kardBalance } = useGlobalState();
+  const { kardBalance, aoDataProvider } = useGlobalState();
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [memeframeId, setMemeframeId] = useState('');
@@ -28,7 +29,39 @@ function CreateProposal({
     setVisibility(false);
   }
 
+  async function create() {
+    try {
+      setLoading(true);
+      const id = await aoDataProvider.createProposal({
+        title,
+        description,
+        stakeAmount,
+      });
+      notificationEmitter.emit(
+        'info',
+        `Proposal ${title} created. Transaction ID: ${id}`,
+      );
+      setLoading(false);
+      close();
+    } catch (e) {
+      setLoading(false);
+      errorEmitter.emit('error', e);
+    }
+  }
+
   if (!visible) return <></>;
+
+  if (loading)
+    return (
+      <div
+        className="absolute left-0 top-0 z-50 flex size-full items-center justify-center bg-black/75 bg-opacity-50"
+        data-test-id="create-proposal-modal-container"
+      >
+        {' '}
+        <Spinner size={200} />{' '}
+      </div>
+    );
+
   return (
     <div
       className="absolute left-0 top-0 z-50 flex size-full items-center justify-center bg-black/75 bg-opacity-50"
@@ -113,15 +146,15 @@ function CreateProposal({
           )}
           <div className="flex gap-5">
             <button
-              className="rounded bg-control-secondary p-1 hover:bg-surface-secondary hover:text-highlight"
+              className="rounded border-2 border-black/0 bg-control-secondary/10 p-1 text-text-primary/50 hover:border-error/50 hover:bg-surface-secondary hover:text-error/50"
               onClick={close}
               data-test-id="create-proposal-modal-close-button"
             >
               Cancel
             </button>
             <button
-              className="rounded bg-control-tertiary p-1 hover:bg-control-primary hover:text-highlight"
-              onClick={() => setLoading(true)}
+              className={`rounded border-2 border-highlight/0 bg-success/10 p-1 text-success hover:border-highlight hover:bg-surface-secondary  hover:text-highlight`}
+              onClick={create}
               data-test-id="create-proposal-modal-submit-button"
             >
               Create

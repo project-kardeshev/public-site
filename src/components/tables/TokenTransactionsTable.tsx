@@ -15,7 +15,7 @@ const stubData: TokenTransaction[] = [
     amount: '100',
     currency: 'KARD',
     timestamp: '2021-10-10',
-    status: 'confirmed',
+    status: 'active',
     tags: [{ name: 'Royalty', value: '100' }],
   },
 ];

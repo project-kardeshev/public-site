@@ -1,10 +1,16 @@
-import { shortTransactionId } from '@src/utils';
+import {
+  arweave,
+  estimateDeadlineDate,
+  getTotalVotes,
+  shortTransactionId,
+} from '@src/utils';
 import { Avatar, List, Tag } from 'antd';
 import Account, { ArAccount } from 'arweave-account';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Proposal } from 'types/dao';
 
+import Spinner from '../loading/Spinner';
 import Vote from './Vote';
 
 function ViewProposal({
@@ -14,12 +20,15 @@ function ViewProposal({
 }: {
   visible: boolean;
   setVisibility: (visible: boolean) => void;
-  proposal: Proposal;
+  proposal?: Proposal;
 }) {
   const [authorProfile, setAuthorProfile] = useState<ArAccount>();
   const [showVoteModal, setShowVoteModal] = useState(false);
+  const [votes, setVotes] = useState({ yay: 0, nay: 0 });
+  const [deadlineMs, setDeadlineMs] = useState(Date.now());
 
   useEffect(() => {
+    if (!proposal) return;
     const descriptionElement = document.getElementById('proposal-description');
     if (descriptionElement) {
       descriptionElement.innerHTML = proposal.description;
@@ -27,13 +36,36 @@ function ViewProposal({
     new Account().get(proposal.author).then((account: ArAccount) => {
       setAuthorProfile(account);
     });
+    console.log(proposal);
+    if (proposal) {
+      setVotes(getTotalVotes(proposal.votes));
+      updateDeadline(proposal);
+    }
   }, [proposal]);
 
   function close() {
     setVisibility(false);
   }
 
+  async function updateDeadline(p: Proposal) {
+    const currentBlockHeight = await arweave.network
+      .getInfo()
+      .then((info) => info.height);
+    const deadline = estimateDeadlineDate(p.deadline, currentBlockHeight);
+    setDeadlineMs(deadline);
+  }
+
   if (!visible) return <></>;
+  if (!proposal)
+    return (
+      <div
+        className="absolute left-0 top-0 z-50 flex size-full items-center justify-center bg-black/75 bg-opacity-50"
+        data-test-id="create-proposal-modal-container"
+      >
+        {' '}
+        <Spinner size={200} />{' '}
+      </div>
+    );
   return (
     <div
       className="absolute left-0 top-0 z-50 flex size-full items-center justify-center bg-black/75 bg-opacity-50"
@@ -87,8 +119,7 @@ function ViewProposal({
                   description={
                     <div className="flex items-center justify-between">
                       <span>
-                        Yay: {proposal.votes.yay.length} | Nay:{' '}
-                        {proposal.votes.nay.length}
+                        Yay: {votes.yay} | Nay: {votes.nay}
                       </span>
                       <button
                         onClick={() => setShowVoteModal(true)}
@@ -112,8 +143,8 @@ function ViewProposal({
               </List.Item>
               <List.Item>
                 <List.Item.Meta
-                  title="Deadline"
-                  description={new Date(proposal.deadline).toDateString()}
+                  title={`Estimated Deadline [block ${proposal.deadline}]`}
+                  description={new Date(deadlineMs).toDateString()}
                 />
               </List.Item>
             </List>

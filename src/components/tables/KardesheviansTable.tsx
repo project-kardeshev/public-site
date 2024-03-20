@@ -6,22 +6,24 @@ import { DataColumn, DataTable } from './common';
 
 const stubData: DaoMember[] = [
   {
-    address: '0x123',
+    address: ''.padEnd(43, '1'),
     proposals: [
       {
         title: 'Proposal 1',
         id: '0x123'.padEnd(43, '0'),
         description: 'This is a proposal',
         votes: {
-          yay: ['0x123'.padEnd(43, '0')],
-          nay: [],
+          [''.padEnd(43, '1')]: {
+            yay: 0,
+            nay: 0,
+          },
         },
         status: 'active',
-        author: '7waR8v4STuwPnTck1zFVkQqJh5K9q9Zik4Y5-5dV7nk',
+        author: ''.padEnd(43, '1'),
         deadline: Date.now(),
       },
     ],
-    blueprints: ['0x123'],
+    blueprints: [''.padEnd(43, '1')],
     bounties: [
       {
         id: '0x123',

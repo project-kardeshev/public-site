@@ -15,18 +15,22 @@ const arweaveAccountOptions = {
 };
 
 function Connect() {
-  const { walletAddress, setWalletAddress, profile, setProfile } =
-    useGlobalState();
+  const {
+    walletAddress,
+    setWalletAddress,
+    profile,
+    setProfile,
+    setShowProfileMenu,
+  } = useGlobalState();
 
   useEffect(() => {
     const walletSwitchHandler = (address: string) => {
-      console.log(address);
       setWalletAddress(address);
       new Account(arweaveAccountOptions)
         .get(address)
         .then((account: any) => {
           notificationEmitter.emit(
-            'notification',
+            'arconnect',
             `Connected. Welcome back, ${startCase(account?.profile.handleName)}!`,
           );
           setProfile(account);
@@ -47,10 +51,9 @@ function Connect() {
           .get(address)
           .then((account: any) => {
             notificationEmitter.emit(
-              'notification',
+              'arconnect',
               `Connected. Welcome back, ${startCase(account?.profile.handleName)}!`,
             );
-            console.log(account);
             setProfile(account);
           })
           .catch((error: any) => {
@@ -70,12 +73,20 @@ function Connect() {
   async function connectArweaveWallet() {
     try {
       if (!window.arweaveWallet) {
-        notificationEmitter.emit(
-          'info',
-          'Arweave wallet not found, install the ArConnect extension to connect. ArConnect is available for Chromium and Firefox at arconnect.io',
+        errorEmitter.emit(
+          'error',
+          new Error(
+            'Arweave wallet not found, install the ArConnect extension to connect. ArConnect is available for Chromium and Firefox at arconnect.io',
+          ),
         );
       }
-      await window.arweaveWallet.connect(['ACCESS_ADDRESS']);
+      await window.arweaveWallet.connect([
+        'ACCESS_ADDRESS',
+        'ACCESS_ALL_ADDRESSES',
+        'SIGN_TRANSACTION',
+        'ACCESS_ARWEAVE_CONFIG',
+        'SIGNATURE',
+      ]);
       const address = await window.arweaveWallet.getActiveAddress();
       setWalletAddress(address);
       const account = await new Account(arweaveAccountOptions).get(address);
@@ -85,22 +96,26 @@ function Connect() {
     }
   }
   return (
-    <button
-      onClick={connectArweaveWallet}
-      className={`rounded bg-control-primary ${walletAddress ? 'pl-2' : 'p-2'} font-bold transition ease-in-out hover:bg-surface-secondary hover:text-highlight`}
-    >
-      {profile === undefined
-        ? 'Connect'
-        : profile?.profile.handleName.length
-          ? profile.profile.handleName
-          : shortTransactionId(walletAddress)}
-      &nbsp;
-      {profile === undefined ? (
-        ''
-      ) : (
-        <Avatar shape="square" src={profile?.profile.avatarURL} />
-      )}
-    </button>
+    <>
+      <button
+        onClick={
+          walletAddress ? () => setShowProfileMenu(true) : connectArweaveWallet
+        }
+        className={`rounded bg-control-primary ${walletAddress ? 'pl-2' : 'p-2'} font-bold transition ease-in-out hover:bg-surface-secondary hover:text-highlight`}
+      >
+        {profile === undefined
+          ? 'Connect'
+          : profile?.profile.handleName.length
+            ? profile.profile.handleName
+            : shortTransactionId(walletAddress)}
+        &nbsp;
+        {profile === undefined ? (
+          ''
+        ) : (
+          <Avatar shape="square" src={profile?.profile.avatarURL} />
+        )}
+      </button>
+    </>
   );
 }
 

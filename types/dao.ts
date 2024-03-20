@@ -8,10 +8,9 @@ export type Proposal = {
   title: string;
   description: string;
   votes: {
-    yay: { [address: string]: number }; // address: tokens staked
-    nay: { [address: string]: number };
+    [x: string]: { yay: number; nay: number };
   };
-  status: string; // 'active' | 'declined' | 'accepted'
+  status: 'active' | 'accepted' | 'declined';
   deadline: number; // blockheight
 };
 

@@ -1,5 +1,5 @@
 import { wrapCreateBrowserRouter } from '@sentry/react';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import {
   Route,
   RouterProvider,
@@ -9,6 +9,7 @@ import {
 
 import AppRouterLayout from './components/layout/AppRouterLayout';
 import NotFound from './pages/NotFound';
+import { useGlobalState } from './services/state/useGlobalState';
 
 const Bounties = React.lazy(() => import('./pages/Bounties'));
 const Blueprints = React.lazy(() => import('./pages/Blueprints'));
@@ -19,6 +20,21 @@ const Kardeshevians = React.lazy(() => import('./pages/Kardeshevians'));
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
 function App() {
+  const { walletAddress, aoDataProvider, setKardBalance, setCredBalance } =
+    useGlobalState();
+
+  async function updateUserData() {
+    if (!walletAddress) return;
+    const kardBalance = await aoDataProvider.getKardBalance(walletAddress);
+    const credBalance = await aoDataProvider.getCredBalance(walletAddress);
+    setKardBalance(kardBalance);
+    setCredBalance(credBalance);
+  }
+
+  useEffect(() => {
+    updateUserData();
+  }, [walletAddress]);
+
   const router = sentryCreateBrowserRouter(
     createRoutesFromElements(
       <Route element={<AppRouterLayout />} errorElement={<NotFound />}>

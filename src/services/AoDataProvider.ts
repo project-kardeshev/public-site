@@ -1,15 +1,16 @@
 /* eslint-disable */
 import { createDataItemSigner, dryrun, message } from '@permaweb/aoconnect';
-import { DAO_PROCESS_ID } from '@src/constants';
+import { CRED_PROCESS_ID, DAO_PROCESS_ID } from '@src/constants';
 import { ArAccount } from 'arweave-account';
 import { Proposal } from 'types/dao';
 
 interface AoClientInterface {
   // read
-  getProposals: (props: {
-    address?: string;
-  }) => Promise<Record<string, Omit<Proposal, 'id'>>>;
-  getBalance: (address: string) => Promise<number>;
+  getProposals: () => Promise<Record<string, Omit<Proposal, 'id'>>>;
+  getKardBalance: (address: string) => Promise<number>;
+  getKardBalances: () => Promise<Record<string, number>>;
+  getCredBalance: (address: string) => Promise<number>;
+  getCredBalances: () => Promise<Record<string, number>>;
   getMessages: (address: string) => Promise<Record<string, any>[]>;
   // write
   vote: (props: {
@@ -23,7 +24,7 @@ interface AoClientInterface {
     stakeAmount: number;
   }) => Promise<string>;
   transferTokens: (props: { to: string; amount: number }) => Promise<string>;
-  mintTokens: (props: { to: string; amount: number }) => Promise<string>;
+  mintTokens: (props: { amount: number }) => Promise<string>;
   subscribe: (props: { address: string }) => Promise<void>;
   unsubscribe: (props: { address: string }) => Promise<void>;
 }
@@ -37,30 +38,48 @@ class AoDataProvider implements AoClientInterface {
     this.process = props.process;
   }
 
-  async getProposals(props: { address?: string }) {
-    const { Output } = await dryrun({
+  async getProposals(): Promise<Record<string, Omit<Proposal, 'id'>>> {
+    const res = await dryrun({
       process: this.process,
-      Action: 'GetProposals',
+      tags: [{ name: 'Action', value: 'GetProposals' }],
     });
-    return Output;
+    console.log(res);
+    return JSON.parse(res.Messages[0].Data);
   }
 
-  async getBalance(address: string) {
-    const {
-      Output: { Balance },
-    } = await dryrun({
+  async getKardBalance(address: string) {
+    const { Messages } = await dryrun({
       process: this.process,
-      Action: 'TokenBalance',
-      Recipient: address,
+      tags: [{ name: 'Action', value: 'Balance' }],
+      Owner: address,
     });
-    return Balance;
+
+    return parseInt(Messages[0].Data);
   }
 
-  async getBalances() {
+  async getKardBalances() {
+    const { Messages } = await dryrun({
+      process: this.process,
+      tags: [{ name: 'Action', value: 'Balances' }],
+    });
+    return Messages[0].data;
+  }
+
+  async getCredBalance(address: string) {
+    const res = await dryrun({
+      process: CRED_PROCESS_ID,
+      tags: [{ name: 'Action', value: 'Balance' }],
+      Owner: address,
+    });
+
+    return parseInt(res.Messages[0].Data);
+  }
+
+  async getCredBalances(process: string = this.process) {
     const {
       Output: { Data },
     } = await dryrun({
-      process: this.process,
+      process: CRED_PROCESS_ID,
       Action: 'TokenBalances',
     });
     return Data;
@@ -93,7 +112,17 @@ class AoDataProvider implements AoClientInterface {
     description: string;
     stakeAmount: number;
   }) {
-    return '';
+    const messageId = await message({
+      process: this.process,
+      signer: createDataItemSigner(window.arweaveWallet),
+      tags: [
+        { name: 'Action', value: 'Propose' },
+        { name: 'Title', value: props.title },
+        { name: 'Description', value: props.description },
+        { name: 'Stake', value: props.stakeAmount.toString() },
+      ],
+    });
+    return messageId;
   }
 
   async transferTokens(props: { to: string; amount: number }) {
@@ -108,17 +137,17 @@ class AoDataProvider implements AoClientInterface {
     return;
   }
 
-  async mintTokens(props: { to: string; amount: number }) {
+  async mintTokens(props: { amount: number }) {
     const messageId = await message({
-      process: this.process,
+      process: CRED_PROCESS_ID,
       signer: createDataItemSigner(window.arweaveWallet),
       tags: [
-        { name: 'Action', value: 'Mint' },
-        { name: 'Quantity', value: props.to },
-        { name: 'Amount', value: props.amount.toString() },
+        { name: 'Action', value: 'Transfer' },
+        { name: 'Quantity', value: props.amount.toString() },
+        { name: 'Recipient', value: this.process },
       ],
     });
-    return '';
+    return messageId;
   }
 }
 
