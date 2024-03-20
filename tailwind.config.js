@@ -1,21 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 import { kebabCase } from 'lodash';
 
-import tokens from './tokens/tokens.js';
+import { color } from './tokens/tokens.js';
 
-const colors = tokens
-  ? Object.fromEntries(
-      Object.values(tokens.color).map(({ attributes, value }) => [
-        kebabCase(attributes.type),
-        value,
-      ]),
-    )
-  : {};
+const colors = Object.fromEntries(
+  Object.entries(color.color.value).map(([attribute, value]) => [
+    kebabCase(attribute),
+    value,
+  ]),
+);
+console.log(colors);
 export default {
-  content: [],
+  content: ['index.html', 'src/**/**/*.{html,tsx}'],
   darkMode: 'class', // or 'media' or 'class
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        diabloHeavy: ['"Diablo Heavy"', 'sans-serif'], // Fallback font is sans-serif
+        diabloLight: ['"Diablo Light"', 'sans-serif'], // Fallback font is sans-serif
+        sans: ['Inter', 'sans-serif'],
+      },
+    },
     colors,
   },
   plugins: [require('tailwindcss-animate')],

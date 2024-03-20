@@ -2,6 +2,9 @@ import winston, { createLogger, format, transports } from 'winston';
 
 import { Logger } from '../types/index.js';
 
+export const DAO_PROCESS_ID = 'brNWDSFqv6isPoKKfOE1ciFhGVwD99J9n_04os_dA0o';
+export const CRED_PROCESS_ID = 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc';
+
 export const THEME_TYPES = {
   LIGHT: 'light',
   DARK: 'dark',
