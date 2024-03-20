@@ -1,10 +1,7 @@
 name: PR deploy
 
 on:
-  pull_request:
-    branches-ignore:
-      - main
-
+  pull_request
 jobs:
   build:
     runs-on: ubuntu-latest
